@@ -22,6 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -35,10 +36,24 @@ var tweetCmd = &cobra.Command{
 	Use:   "tweet",
 	Short: "Post a tweet",
 	Long:  `Expects a message on the end of the command, which can be up to 140 characters long`,
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		t := time.Now()
-		m := strings.Join(args, " ")
+
+		var m string
+		stat, _ := os.Stdin.Stat()
+		if (stat.Mode() & os.ModeCharDevice) == 0 {
+			// data is being piped in
+			bytes, _ := ioutil.ReadAll(os.Stdin)
+			m = strings.Split(string(bytes), "\n")[0]
+		} else {
+			// read data from cli
+			m = strings.Join(args, " ")
+			if len(m) == 0 {
+				log.Fatalln("Usage: gotwtxt tweet <message> # or pipe the message from stdin")
+			}
+		}
+
 		if len(m) > 140 {
 			log.Fatalln("Message should be 140 characters or less")
 		}
@@ -48,7 +63,7 @@ var tweetCmd = &cobra.Command{
 			log.Println(err)
 		}
 		defer f.Close()
-		if _, err := f.WriteString(t.Format(time.RFC3339) + "\t" + strings.Join(args, " ") + "\n"); err != nil {
+		if _, err := f.WriteString(t.Format(time.RFC3339) + "\t" + m + "\n"); err != nil {
 			log.Println(err)
 		}
 	},

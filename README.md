@@ -13,7 +13,11 @@
 Send a tweet:
 
 ```shell
+# pass the message on the cli
 gotwtxt tweet hello world
+
+# or take the first line from stdin
+echo hello world | gotwtxt tweet
 ```
 
 Follow somebody:
