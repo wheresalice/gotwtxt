@@ -11,6 +11,7 @@ changelog:
       - '^.github:'
       - '^.vscode:'
       - '^test:'
+      - '^docs:'
 
 # ---------------------------
 # Publishers
