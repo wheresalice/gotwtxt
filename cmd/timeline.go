@@ -83,10 +83,14 @@ to quickly create a Cobra application.`,
 			sb := string(body)
 			lines := strings.Split(sb, "\n")
 			for i, line := range lines {
-				r := regexp.MustCompile(` {4,}|\t`) // whilst this is supposed to be a tab, it is sometimes multiple spaces
+				// skip empty lines and comments
+				if len(line) == 0 || string(line[0]) == "#" {
+					continue
+				}
+					r := regexp.MustCompile(` {4,}|\t`) // whilst this is supposed to be a tab, it is sometimes multiple spaces
 				lineFields := r.Split(line, 2)
 				if len(lineFields) != 2 {
-					log.Printf("Failed to parse line %v of %s", i, url)
+					log.Printf("Failed to parse line %v of %s", i+1, url)
 				} else {
 					dt, _, err := fuzzytime.Extract(lineFields[0])
 					if err != nil {
