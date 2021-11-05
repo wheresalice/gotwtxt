@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/bcampbell/fuzzytime v0.0.0-20191010161914-05ea0010feac
-	github.com/fatih/color v1.9.0
+	github.com/fatih/color v1.13.0
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
@@ -17,8 +17,8 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/mattn/go-colorable v0.1.6 // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-colorable v0.1.9 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
