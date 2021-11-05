@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/gregjones/httpcache/diskcache"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
 	"log"
@@ -35,6 +36,7 @@ import (
 
 	"github.com/bcampbell/fuzzytime"
 	"github.com/fatih/color"
+	"github.com/gregjones/httpcache"
 	"github.com/spf13/cobra"
 )
 
@@ -55,15 +57,14 @@ func (s tweetSlice) Len() int      { return len(s) }
 // timelineCmd represents the timeline command
 var timelineCmd = &cobra.Command{
 	Use:   "timeline",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Print the timeline of people you are following",
+	Long: `Fetch all of the posts of the accounts you are following and print them in chronological order.  Will use caching if the server sends the right headers`,
 	Run: func(cmd *cobra.Command, args []string) {
 		home, _ := os.UserHomeDir()
+		cache := diskcache.New(path.Join(home, ".twtxt_cache"))
+		transport := httpcache.NewTransport(cache)
+		client := &http.Client{Transport: transport}
+
 		followingFile := path.Join(home, ".twtxt_following.ini")
 		following, err := ini.Load(followingFile)
 		if err != nil {
@@ -72,7 +73,7 @@ to quickly create a Cobra application.`,
 
 		var tweets tweetSlice
 		for username, url := range following.Section("").KeysHash() {
-			resp, err := http.Get(url)
+			resp, err := client.Get(url)
 			if err != nil {
 				log.Printf("Failed to fetch %s: %v\n", url, err)
 			}
