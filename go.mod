@@ -8,7 +8,7 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	gopkg.in/ini.v1 v1.66.3
+	gopkg.in/ini.v1 v1.66.4
 )
 
 require (
